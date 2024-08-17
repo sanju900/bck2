@@ -1,0 +1,34 @@
+download kubectl and minikube and keep in same filder\\
+add path to environment variable
+>minikube start --driver=docker
+minikube config set driver docker
+minikube status
+kubectl cluster-info
+kubectl get node
+
+To run dowcker file from repo , tell the enrivorment
+
+it's mean that giving permision to minikube to read files from local
+
+minikube docker-env
+@FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
+
+
+Now we have jar file and we build the images 
+then need to deploy this jar on pods 
+Steps:
+
+Create deployment object
+kubectl create deployment name-of-deploment --image=image-name:version --port=8080
+
+kubectl create deployment spring-boot-k88 --image=springboot-k8s-demo:1.0 --port=8080
+
+
+to delete 
+kubectl get deployment
+kubectl delete deployment spring-boot-k8
+
+To check logs
+
+kubectl logs podsName
+kubectl logs spring-boot-k8-57779cc97f-h8ghw

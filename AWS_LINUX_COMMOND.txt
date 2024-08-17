@@ -1,0 +1,471 @@
+Verify user name
+
+whoami
+
+--------------------------------------
+cd ~/Desktop
+chmod 400 ec2-key.pem
+ssh -i ec2-key.pem ec2-user@publicMY-IP
+ssh -i ec2-key.pem ec2-user@14.140.116.145
+
+default insall s/w location : cd /usr/share
+-----------------------------------
+
+To Root directory
+sudo su
+
+Out of root
+ sudo -i
+
+
+-------------------------------------
+to insall softwares :  yum insall tomcat
+check softwares uses port : netstat -ntlp
+
+yum install nginx
+systemctl status nginx
+yum install java-1.8.0-openjdk
+
+
+sudo su -
+yum install nginx
+amazon-linux-extras install nginx1
+systemctl status nginx
+systemctl start nginx
+
+yum remove tomcat
+-------------
+to read the text in file : cat index.html
+to remove the text in file : echo > index.html
+to add text in file : echo "msg" > index.html
+
+-------------
+ping one vpc to another instance
+-connect with first instance with public ip
+-get to root user
+-ping -c4 privateIp of sencond instace
+
+Check the configuration
+-------------------------
+alternatives --config java
+
+
+---------------------------
+http://18.208.218.107:8080/home
+
+
+-----Aws lectures good
+--https://www.youtube.com/watch?v=B79Ux8_ipQs&list=PLYwpaL_SFmcCyQH0n9GHfwviu6KeJ46BV&index=21 --done
+https://www.youtube.com/watch?v=AK6Rf_yjvI0
+https://www.youtube.com/watch?v=-wVt1UKef5U
+https://www.youtube.com/watch?v=0CeV8aqnIMI&list=PLeqch-0_f39EgidO06BoRqAP0FQMhGYlR
+
+
+
+-----------------
+sudo vi /etc/yum.repos.d/mongodb-org-5.0.repo
+
+[mongodb-org-3.0]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/amazon/2013.03/mongodb-org/3.0/x86_64/
+gpgcheck=0
+enabled=1
+
+--------------------------------------------------------------------------------------------
+*****************************************************JENKINS-------------------------------------------------------------
+Create instance for jenkin on 8080 port in AWS EC2
+connect cmd with instance
+come to root user
+
+  sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+  sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+  yum install epel-release
+  yum install fontconfig java-11-openjdk
+  yum install jenkins
+  
+  
+  cat /var/lib/jenkins/secrets/initialAdminPassword
+  
+--To Read the password from file 
+cat /var/lib/jenkins/secrets/initialAdminPassword
+
+----check jenkins
+service jenkins status
+
+----start jenkin service
+sudo systemctl start jenkins
+OR
+service jenkins start
+
+jenkin server 
+http://54.157.59.103:8080/
+
+
+INTEGRATE GITHUB WITH JENKINS
+	install Git on jenkins instance
+	install GitHub plugin on Jenkins GUI
+	Configure git on jenkin GUI
+	
+	to u want to set tempoay server name
+	hostname Jenkins-sever
+
+
+-------Now  install git on jenkins instance -- yum install git
+-------install Github plugins on Jenkins GUI -- Goto Dashboard->Manage Jenkins->Manage Plugins->Available Sarch github for jenkin->install
+-------Configure Git on Jenkins GUI ---Manage Jenkins->Gloabal tool configuration->Git name
+		Path to Git executable : tye cpmmand "whereis git" past the path
+------New Job->add the github https clone url and save->Build it
+
+
+-------Run Jenkins job to pull code from GitHub:
+		create a new job : PullCodeFromGitHub
+		Source Code Management: GIT
+		Repository URL : https url ie. https://github.com/sanju900/hello-world.git
+		Apply and Save
+		
+--------Now build the job and check once evrything working fine
+
+		To see workspace
+		cd /var/lib/jenkins/workspace/
+		
+		
+		for home directory cd ~
+		
+		
+	//set java home path
+ export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-11.0.18.0.10-1.amzn2.0.1.x86_64"
+ PATH=$JAVA_HOME/bin:$PATH
+$ echo $JAVA_HOME
+
+
+
+
+cd /opt
+wget maven tar link
+tar -xvzf apache-maven-3.9.1-bin.tar.gz
+mv apache-maven-3.9.1 maven
+export MAVEN_HOME=/opt/maven/bin
+export PATH=$PATH:$MAVEN_HOME
+$ echo $MAVEN_HOME
+
+
+
+M2_HOME=/opt/maven
+M2=/opt/maven/bin
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.18.0.10-1.amzn2.0.1.x86_64
+# User specific environment and startup programs
+
+#PATH=$PATH:$HOME/.local/bin:$HOME/bin
+PATH=$PATH:$HOME/bin:$JAVA_HOME:$M2_HOME:$M2
+
+
+
+
+
+
+------Now have to integrate maven with jenkins below steps
+		->Set up maven on jipkins server
+		->set up environment variables - JAVA_HOME,
+									   -M2,M2_HOME(Maven environments varibales)
+		->install maven plugins
+		->Configure Maven and java on jinkins GUI
+		
+---swith to opt directory
+
+	go to maven download : https://maven.apache.org/download.cgi
+	 copy link of Binary tar.gz archive	
+	cd /opt
+	wget https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
+	
+	Now need to extract maven gz package
+	
+	tar -xvzf apache-maven-3.8.5-bin.tar.gz(To extract our maven package)
+	
+	mv apache-maven-3.8.5 maven(Move directory to maven folder)
+	cd maven
+	cd bin
+	./mvn -v
+	cd ~  (Go to home directory)
+	ll -a
+	Now get the jdk home directory in another tab and copy the path (find / -name java-11*)
+		-  /usr/lib/jvm/java-11-openjdk-11.0.13.0.8-1.amzn2.0.3.x86_64
+		
+		
+		Edit bash_profile to set variable
+		
+		
+	vi .bash_profile(Edit to set envn variables)
+	-fi
+	 M2_HOME=/opt/maven
+	 M2=/opt/maven/bin
+	 JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.13.0.8-1.amzn2.0.3.x86_64
+	 PATH=$PATH:$HOME:/bin:$JAVA_HOME:$M2_HOME:$M2
+	 (Here user insert button to insert and for save escape press esc then shift+zz or esc->:wq)
+	 Now echo $PATH
+	 source .bash_profile(To reload the bash file)
+	 echo $PATH (We will get all the path that have been changes)
+	(Now that our MVN path set and can execute from anywhere)
+	mvn -v
+	
+To Integrate with maven install plugins in jenkin
+ -Dashboard->manage jenkin->Manage plugins->Available->Maven IntegrationVersion->install without restart
+ -Dashboard->manage jenkin->Global tools->Now add the location of jdk and maven in jenkin as we have install both
+ 
+	
+----Now build java project using jenkins----------
+Steps:
+	create new Job (First Maven project)
+	select maven project
+	add git repo
+	Goals and options:clean install
+	Apply and Save
+	Now build the Job(Fetch the code from git and download all the dependency as in Pom file and build with the help of maven)
+	
+	
+-----------------------------now install tomcat on new ec2 instance----------------------
+
+amazon-linux-extras install java-openjdk11
+
+install tomcat
+
+wget https://downloads.apache.org/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.tar.gz
+tar -xvzf apache-tomcat-9.0.63.tar.gz.asc(To extract our maven package)
+mv apache-tomcat-9.0.63 tomcat
+cd tomcat/bin/
+./startup.sh
+http://3.87.30.41:8080/
+
+
+now for permissin to tomcat have to edit contex.xml
+
+in tomcat directory
+ find / -name contex.xml
+ 
+ /opt/tomcat/webapps/host-manager/META-INF/context.xml
+/opt/tomcat/webapps/manager/META-INF/context.xml
+these two need to be updated
+
+ vi  /opt/tomcat/webapps/host-manager/META-INF/context.xml //comment value for local ip
+ vi  /opt/tomcat/webapps/manager/META-INF/context.xml    //comment value for local ip
+ 
+ retsrt tomcat
+
+
+Now create link to startup and down tomcat server=============
+
+ln -s /opt/tomcat/bin/startup.sh /usr/local/bin/tomcatup
+ln -s /opt/tomcat/bin/shutdown.sh /usr/local/bin/tomcatdown
+
+
+Now give permission to tomcat host page to access the manager menu
+
+vi /opt/tomcat/webapps/manager/META-INF/context.xml
+vi  /opt/tomcat/webapps/host-manager/META-INF/context.xml
+
+edit above two files and comment the value tag that donate local ip ie start with 127...
+
+Now for user crdential go to tomcat config
+
+->vi tomcat/conf/tomcat-users.xml
+  vi tomcat-users.xml
+  
+
+
+
+
+
+------------------Integrate tomcat with jenkins-----------------------
+
+vi tomcat/conf/tomcat-users.xml
+
+userlist->
+ <role rolename="manager-gui"/>
+ <role rolename="manager-script"/>
+ <role rolename="manager-jmx"/>
+ <role rolename="manager-status"/>
+ <user username="admin" password="admin" roles="manager-gui, manager-script, manager-jmx, manager-status"/>
+ <user username="deployer" password="deployer" roles="manager-script"/>
+ <user username="tomcat" password="tomcat" roles="manager-gui"/>
+ 
+ 
+
+
+Steps->
+Dashboard->Plugins-manager->search->Deploy to container(Plugins, This plugins allow u to deploy was file to container)
+
+Now tomcate with credential 
+Dashboard->Manage jenkins->manage credentials->jenkins->Global Credentials->Add credentials(Add tomcat credentials usrname=deployer)
+
+
+ 
+ Create new job , code deploye to tomcat server---------------------------------------------------
+ 
+ name: BuildAndDeployJob
+ git urll added of project
+ goals andoptions:clean install
+ Post-build Actions: Deploy war/ear to a container WAR/EAR files
+ **/*.war
+ Container : tomcat 8
+ select credential deployer
+ tomcat url:http://3.89.196.140:8080/
+ apply+save
+ 
+ Build 
+ 
+ 
+ --------------------------------Deploy code on doscker container instaed of VM------------------------
+ Steps
+ ->setup ec2 instance for docker
+ ->install docker
+ ->start docker service
+
+
+yum install docker -y
+docker --version 
+
+sudo systemctl start docker
+
+
+# start docker services
+service docker start
+service docker status
+
+Now create a tomcat container--------
+docker pull tomcat
+docker.io/library/tomcat:latest
+
+create container-
+docker run -d --name tomcat-container -p 8081:8080 tomcat:latest
+ex 81
+in 80
+
+in security grp aws instance add in boud row with 8081 -9000 port
+
+Now get an error when hit an ip with 8081 port
+HTTP Status 404 – Not Found
+then
+
+log tomcat container with the help of bin/bash
+
+docker exec -it tomcat-container /bin/bash
+ls
+cd webapps.dist
+ls
+Now copy content to webapp directory
+
+cp -R * ../webapps/ (copy data of webapps.dist to webapps directory) now tomcat ip with 8081 is running
+
+(This was temporary solution)
+
+Flow->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+docker hub->docker pull->docker file->docker build->docker image->docker run->docker container
+
+some docker file instruction->
+
+FROM : To pull the base image
+RUN : To execute the commands
+CMD: To provide the defaults fro an executing container
+ENTRYPOINT : To configure a container that will run as an exceutable
+WORKDIR : To set the working directory
+COPY :  To copy a directory from your local machine to docker container
+ADD : To copy file an dfolder from your local to docker container
+EXPOSE : Inform docker that the container listens o the specified netword ports at runtime
+ENV : to set environment variables
+
+->>>>How to create docker container
+Now install tomcat on Centos-------------------------------------
+->Pull centos from docker hub 				 -FROM
+->install java				  				 -RUN
+->create opt/tomcat diretory  				 -RUN
+->change work directory to /opt/tomcat		 -WORKDIR
+->dowload tomcat package					 -ADD/RUN
+->Extract									 -RUN
+->Rename to tomcat direvtory				 -RUN
+->tell the docker that it runs on 8080		 -EXPOSE
+->Start tomcat service						 -CMD
+
+-create a docker file -> vi Dockerfile
+
+			--------Did not work properly
+						FROM centos:latest
+						RUN yum install java -y
+						RUN mkdir /opt/tomcat
+						WORKDIR /opt/tomcat
+						ADD https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.64/bin/apache-tomcat-9.0.64.tar.gz .
+						RUN tar -xvzf apache-tomcat-9.0.64.tar.gz 
+						RUN mv apache-tomcat-9.0.64/* /opt/tomcat
+						EXPOSE 8080
+						CMD ["/opt/tomcat/bin/catalina.sh","run"]
+						
+			---Below is working properly
+			
+FROM centos:latest
+RUN cd /etc/yum.repos.d/
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+RUN yum install java -y
+RUN mkdir /opt/tomcat
+WORKDIR /opt/tomcat
+ADD https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.74/bin/apache-tomcat-9.0.74.tar.gz .
+RUN tar -xvzf apache-tomcat-9.0.74.tar.gz 
+RUN mv apache-tomcat-9.0.74/* /opt/tomcat
+EXPOSE 8080
+CMD ["/opt/tomcat/bin/catalina.sh","run"]
+
+->Create a docker image
+	docker build  -t mytomcat .
+->Build docker container
+	docker run -d --name mytomcat-server -p 8083:8080 mytomcat
+							docker run -d --name demotomcat-server -p 8085:8080 demotomcat
+
+	<!--	Comment				
+-New method for custome docker file-------------------------
+remove dockerfile ->rm Dockerfile
+				  ->
+				  -> FROM tomcat:latest
+				  -> RUN cp -R /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
+				  -> docker build  -t demotomcat .
+						
+	-->
+	
+	==============Now integrate docker with jenkins=======================
+	Steps-
+	create a docker admin user of docker group
+	copy artifact from jenkin to dockerhost (Install "Publish over ssh" plugin)
+	Add docker host to jenkins configur system
+	
+	Now chek the user and groups in dockerhost  
+	->cat /etc/passwd
+	->cat /etc/group
+		
+	useradd dockeradmin
+	passwd dockeradmin(dockeradmin)
+	Now add user to docker grp
+	id dockeradmin
+	//usermod -aG groupname username
+	usermod -aG docker dockeradmin
+	
+	==Here ec2 instance does not allow password based authentication , so to allow this below steps
+	vi /etc/ssh/sshd_config
+	Now uncomment PasswordAuthenicat:yes
+	service sshd reload(refresh sshd service)
+	
+	Now generate the key also for dockeradmin user
+	sudo su - dockeradmin
+	ssh-keygen
+	
+	Now to to jenkin server -> install plugin ->Publish over ssh
+		jenkin server ->configuration->Publish over SSH->apply save
+		
+
+ 
+	==============Now Deploy job on docker container=======================
+	
+	Now create a new job for this 
+ Copy from buildAndDeployJob
+ delete  war deployment tag
+ Post-build Actions:Send build artifact over ssh
+ Source file:webapp/target/*.war
+ Remove prefix:webapp/target
+ Remote directory:/home/dockeradmin 
